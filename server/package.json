@@ -13,6 +13,7 @@
   "keywords": [
     "DARKHOUSE",
     "luigi",
+    "ghost",
     "mansion",
     "victor",
     "zhou",
@@ -24,5 +25,9 @@
   "bugs": {
     "url": "https://github.com/vzhou842/DARKHOUSE/issues"
   },
-  "homepage": "https://github.com/vzhou842/DARKHOUSE#readme"
+  "homepage": "https://github.com/vzhou842/DARKHOUSE#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "jade": "^1.11.0"
+  }
 }
