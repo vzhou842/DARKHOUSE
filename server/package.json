@@ -1,0 +1,28 @@
+{
+  "name": "darkhouse",
+  "version": "0.0.1",
+  "description": "A browser game based on Nintendo's Luigi's Mansion",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vzhou842/DARKHOUSE.git"
+  },
+  "keywords": [
+    "DARKHOUSE",
+    "luigi",
+    "mansion",
+    "victor",
+    "zhou",
+    "jason",
+    "jiang"
+  ],
+  "author": "Victor Zhou and Jason Jiang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vzhou842/DARKHOUSE/issues"
+  },
+  "homepage": "https://github.com/vzhou842/DARKHOUSE#readme"
+}
