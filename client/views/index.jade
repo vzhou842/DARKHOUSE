@@ -2,10 +2,17 @@ html
 	head
 		title
 			|DARKHOUSE
+		link(rel='stylesheet', href='/css/main.css')
 	body
-		.container
-			button#create-game Create Game
-			button#join-game Join Game
+		.container#main-menu-container
+			center
+				button#create-game Create Game
+				button#join-game Join Game
+		.container#room-lobby-container.invisible
+			center
+				h1#room-title.
+					Room [ title ]
+		.container#game-container.invisible
 
 		// Scripts
 		script(type='text/javascript', src='https://cdn.socket.io/socket.io-1.4.5.js')
