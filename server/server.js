@@ -30,6 +30,9 @@ app.use(express.static(CLIENT_DIR, { maxAge: '8h' }));
 app.get('/', function(req, res, next) {
 	res.render('index', { title: 'DARKHOUSE' });
 });
+app.get('/:gameID', function(req, res, next) {
+	res.render('index', { title: 'DARKHOUSE', gameID: req.params.gameID });
+});
 
 // development error handler
 // will print stacktrace
