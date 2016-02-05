@@ -28,6 +28,8 @@
   "homepage": "https://github.com/vzhou842/DARKHOUSE#readme",
   "dependencies": {
     "express": "^4.13.4",
-    "jade": "^1.11.0"
+    "jade": "^1.11.0",
+    "path": "^0.12.7",
+    "socket.io": "^1.4.5"
   }
 }

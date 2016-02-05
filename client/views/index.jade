@@ -1,6 +1,14 @@
 html
-	title
-		|DARKHOUSE
 	head
+		title
+			|DARKHOUSE
 	body
+		.container
+			button#create-game Create Game
+			button#join-game Join Game
+
+		// Scripts
+		script(type='text/javascript', src='https://cdn.socket.io/socket.io-1.4.5.js')
+		script(type='text/javascript', src='https://code.jquery.com/jquery-latest.min.js')
+		script(type='text/javascript', src='/js/darkhouse-client.js')
 	footer
