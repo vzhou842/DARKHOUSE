@@ -1,5 +1,4 @@
 function Player() {
-  // add a basic square
   var squareGeometry = new THREE.Geometry(); 
   squareGeometry.vertices.push(new THREE.Vector3(-1.0,  1.0, 0.0)); 
   squareGeometry.vertices.push(new THREE.Vector3( 1.0,  1.0, 0.0)); 
