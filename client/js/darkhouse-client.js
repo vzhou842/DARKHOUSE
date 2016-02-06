@@ -6,7 +6,9 @@
 	var socket = io.connect();
 
 	// Namespaces
-	var ROOM_STATE = {};
+	var ROOM_STATE = {
+		userIsHost: false,
+	};
 
 	// Check if URL has gameID
 	ROOM_STATE.gameID = window.location.pathname.substring(1);
@@ -32,6 +34,7 @@
 	socket.on('game_created', function(data) {
 		transitionToRoom(data.gameID);
 		ROOM_STATE.players = [];
+		ROOM_STATE.userIsHost = true;
 		configureRoomForPlayers();
 	});
 
@@ -49,7 +52,14 @@
 			console.error('received player_joined_room for gameID ' + data.gameID + ', not ' + ROOM_STATE.gameID);
 			return;
 		}
-		addPlayerToRoom(data.socketID);
+
+		ROOM_STATE.players.push(data.socketID);
+		configureRoomForPlayers();
+
+		if (ROOM_STATE.players.length == 4) {
+			//Start Game!
+			showStartGameButtonIfHost();
+		}
 	});
 
 	// Failed to join room
@@ -79,8 +89,9 @@
 		});
 	}
 
-	function addPlayerToRoom(socketID) {
-		ROOM_STATE.players.push(socketID);
-		configureRoomForPlayers();
+	function showStartGameButtonIfHost() {
+		if (ROOM_STATE.userIsHost) {
+			$('#room-start-button').removeClass('invisible');
+		}
 	}
 })();
