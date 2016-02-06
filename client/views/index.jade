@@ -14,13 +14,17 @@ html
 			center
 				h1.
 					DARKHOUSE
-				h3#room-title.
+				h2#room-title.
 					Room [ title ]
+				h3#room-person-count.
+					0 people in this room:
+				p#room-usernames.
+
 		.container#game-container.invisible
 
 		// Scripts
 		script(type='text/javascript', src='https://cdn.socket.io/socket.io-1.4.5.js')
 		script(type='text/javascript', src='https://code.jquery.com/jquery-latest.min.js')
-		script(type='text/javascript', src=https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js')
+		script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js')
 		script(type='text/javascript', src='/js/darkhouse-client.js')
 	footer

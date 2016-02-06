@@ -5,6 +5,7 @@ var DarkhouseController = require('./darkhouse');
 var app = express();
 
 var CLIENT_DIR = path.join(__dirname, '../client');
+var SHARED_DIR = path.join(__dirname, '../shared');
 
 //start listening
 var port = process.env.PORT || '3000';
@@ -25,6 +26,7 @@ app.set('view engine', 'jade');
 
 // Middleware
 app.use(express.static(CLIENT_DIR, { maxAge: '8h' }));
+app.use(express.static(SHARED_DIR, { maxAge: '8h' }))
 
 // Routes
 app.get('/', function(req, res, next) {
