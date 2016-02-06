@@ -17,6 +17,7 @@ DarkhouseController.prototype.onConnection = function(socket) {
 	socket.on('create_game', createGame);
 	socket.on('join_game', joinGame);
     socket.on('start_game', startGame);
+    socket.on('leave_game', leaveGame);
 }
 
 function disconnect() {
@@ -68,6 +69,25 @@ function joinGame(data) {
     	this.emit('game_not_found', {
     		gameID: gameID,
     	});
+    }
+}
+
+function leaveGame(data) {
+    var gameID = data.gameID;
+
+    // See if this user is really in this game
+    if (sockets[this.id].gameID == gameID) {
+        //Let other players in room know this player left
+        data.socketID = this.id;
+        io.to(gameID).emit('player_disconnected', data);
+
+        this.leave(gameID);
+        sockets[this.id].gameID = null;
+
+        // Let this player know the room was left sucessfully
+        this.emit('game_left', { gameID: gameID });
+    } else {
+        console.error('Received leave_game for game ' + gameID + ' when player is in game ' + sockets[this.id].gameID);
     }
 }
 

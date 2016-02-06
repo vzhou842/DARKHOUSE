@@ -46,9 +46,12 @@
 
 	// Back to Main button
 	$('#back-to-main').click(function() {
-		$('#create-game').removeClass('invisible');
-		$('#room-number-input').addClass('invisible');
-		$('#back-to-main').addClass('invisible');
+		resetToMainFromJoin();
+	});
+
+	// Leave Room button
+	$('#leave-room').click(function() {
+		socket.emit('leave_game', { gameID: ROOM_STATE.gameID });
 	});
 
 	// Start Game button
@@ -68,10 +71,18 @@
 
 	// The user successfully joined a room
 	socket.on('game_joined', function(data) {
-		console.log('data: ' + JSON.stringify(data, null, 3));
 		transitionToRoom(data.gameID);
 		ROOM_STATE.players = data.players;
 		configureRoomForPlayers();
+	});
+
+	// User successfully left a game
+	socket.on('game_left', function(data) {
+		if (data.gameID == ROOM_STATE.gameID) {
+			backToMainFromRoom();
+		} else {
+			console.error('Received game_left for game ' + data.gameID + ' when we are in game ' + ROOM_STATE.gameID);
+		}
 	});
 
 	// Another player joined the room
@@ -90,7 +101,7 @@
 		}
 	});
 
-	// Another player disconnected
+	// Another player disconnected from this game
 	socket.on('player_disconnected', function(data) {
 		var socketID = data.socketID;
 
@@ -140,6 +151,18 @@
 		if (ROOM_STATE.userIsHost) {
 			$('#room-start-button').removeClass('invisible');
 		}
+	}
+
+	function resetToMainFromJoin() {
+		$('#create-game').removeClass('invisible');
+		$('#room-number-input').addClass('invisible');
+		$('#back-to-main').addClass('invisible');
+	}
+
+	function backToMainFromRoom() {
+		$('#main-menu-container').removeClass('invisible');
+		$('#room-lobby-container').addClass('invisible');
+		resetToMainFromJoin();
 	}
 
 	function startGame() {
