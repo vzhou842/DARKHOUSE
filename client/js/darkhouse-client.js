@@ -7,8 +7,13 @@
 
 	// Namespaces
 	var ROOM_STATE = {
+		gameID: undefined,
 		userIsHost: false,
+		players: [],
 	};
+	var GAME_STATE = {
+		gameHasStarted: false,
+	}
 
 	// Check if URL has gameID
 	ROOM_STATE.gameID = window.location.pathname.substring(1);
@@ -64,6 +69,20 @@
 		if (ROOM_STATE.players.length == 4) {
 			//Start Game!
 			showStartGameButtonIfHost();
+		}
+	});
+
+	// Another player disconnected
+	socket.on('player_disconnected', function(data) {
+		var socketID = data.socketID;
+
+		// If still in room
+		if (ROOM_STATE.gameID && !GAME_STATE.gameHasStarted) {
+			var index = ROOM_STATE.players.indexOf(socketID);
+			if (index >= 0) {
+				ROOM_STATE.players.splice(index);
+				configureRoomForPlayers();
+			}
 		}
 	});
 
