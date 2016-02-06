@@ -11,6 +11,7 @@ var sockets = {};
 
 DarkhouseController.prototype.onConnection = function(socket) {
     sockets[socket.id] = {
+        username: socket.id,
         gameID: null,
     };
     socket.on('disconnect', disconnect);
@@ -31,9 +32,10 @@ function disconnect() {
     sockets[this.id] = null;
 }
 
-function createGame() {
+function createGame(data) {
 	// Create a unique Socket.IO Room
     var gameID = ( Math.random() * 999999 ) | 0;
+    var username = data.username;
 
     this.emit('game_created', {
     	gameID: gameID,
@@ -43,16 +45,20 @@ function createGame() {
     // Rooms are named after their gameID
     this.join(gameID.toString());
     sockets[this.id].gameID = gameID.toString();
+    sockets[this.id].username = username;
 }
 
 function joinGame(data) {
 	var gameID = data.gameID;
+    var username = data.username;
+
+    sockets[this.id].username = username;
 
 	// See if this game exists
 	var room = io.sockets.adapter.rooms[gameID];
     if (room) {
     	// Let other players in room know this player joined
-    	data.socketID = this.id;
+    	data.username = sockets[this.id].username;
     	io.to(gameID).emit('player_joined_room', data);
 
     	this.join(gameID);
@@ -63,7 +69,7 @@ function joinGame(data) {
     	players.splice(players.indexOf(this.id), 1);
     	this.emit('game_joined', {
     		gameID: gameID,
-    		players: players,
+    		players: usernamesFromIDs(players),
     	});
     } else {
     	this.emit('game_not_found', {
@@ -104,6 +110,16 @@ function startGame(data) {
             gameID: gameID,
         });
     }
+}
+
+// ---------- Helper Functions ----------
+
+function usernamesFromIDs(ids) {
+    var usernames = [];
+    ids.forEach(function(id) {
+        if (sockets[id]) usernames.push(sockets[id].username);
+    });
+    return usernames;
 }
 
 module.exports = DarkhouseController;

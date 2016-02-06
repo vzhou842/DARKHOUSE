@@ -18,14 +18,15 @@
 	// Check if URL has gameID
 	ROOM_STATE.gameID = window.location.pathname.substring(1);
 	if (ROOM_STATE.gameID) {
-		socket.emit('join_game', { gameID: ROOM_STATE.gameID });
+		socket.emit('join_game', { gameID: ROOM_STATE.gameID, username: $('#username-input').val() });
 	} else ROOM_STATE.gameID = undefined;
 
-	// ----- User Interaction Events -----
+
+	// ---------- User Interaction Events ----------
 
 	// Create Game button
 	$('#create-game').click(function() {
-		socket.emit('create_game');
+		socket.emit('create_game', { username: $('#username-input').val() });
 	});
 
 	// Join Game button
@@ -37,7 +38,7 @@
 		} else {
 			var gameID = $('#room-number-input').val();
 			if (gameID) {
-				socket.emit('join_game', { gameID : gameID });
+				socket.emit('join_game', { gameID : gameID, username: $('#username-input').val() });
 			} else {
 				alert('Please enter the Room Number');
 			}
@@ -59,7 +60,8 @@
 		socket.emit('start_game', { gameID: ROOM_STATE.gameID });
 	});
 
-	// ----- Communications from Server -----
+
+	// ---------- Communications from Server ----------
 
 	// Game created by user
 	socket.on('game_created', function(data) {
@@ -92,7 +94,7 @@
 			return;
 		}
 
-		ROOM_STATE.players.push(data.socketID);
+		ROOM_STATE.players.push(data.username);
 		configureRoomForPlayers();
 
 		if (ROOM_STATE.players.length == 4) {
@@ -125,7 +127,8 @@
 		alert('Room ' + data.gameID + ' doesn\'t exist!');
 	});
 
-	// ----- UI changes -----
+
+	// ---------- UI changes ----------
 	function transitionToRoom(gameID) {
 		$('#main-menu-container').addClass('invisible');
 		$('#room-lobby-container').removeClass('invisible');
@@ -143,7 +146,7 @@
 
 		$('#room-usernames').html('You<br>');
 		players.forEach(function(player) {
-			$('#room-usernames').append('Player ' + player + '<br>');
+			$('#room-usernames').append(player + '<br>');
 		});
 	}
 
