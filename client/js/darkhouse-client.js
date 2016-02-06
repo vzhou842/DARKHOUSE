@@ -28,6 +28,11 @@
 		socket.emit('join_game', { gameID: '123456' });
 	});
 
+	// Start Game button
+	$('#room-start-button').click(function() {
+		socket.emit('start_game', { gameID: ROOM_STATE.gameID });
+	});
+
 	// ----- Communications from Server -----
 
 	// Game created by user
@@ -62,6 +67,11 @@
 		}
 	});
 
+	// Game started
+	socket.on('start_game', function() {
+		startGame();
+	});
+
 	// Failed to join room
 	socket.on('game_not_found', function(data) {
 		alert('Room ' + data.gameID + ' doesn\'t exist!');
@@ -93,5 +103,10 @@
 		if (ROOM_STATE.userIsHost) {
 			$('#room-start-button').removeClass('invisible');
 		}
+	}
+
+	function startGame() {
+		$('#room-lobby-container').addClass('invisible');
+		$('#game-container').removeClass('invisible');	
 	}
 })();

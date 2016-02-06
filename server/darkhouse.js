@@ -9,6 +9,7 @@ function DarkhouseController(sio) {
 DarkhouseController.prototype.onConnection = function(socket) {
 	socket.on('create_game', createGame);
 	socket.on('join_game', joinGame);
+    socket.on('start_game', startGame);
 }
 
 function createGame() {
@@ -26,6 +27,7 @@ function createGame() {
 
 function joinGame(data) {
 	var gameID = data.gameID;
+
 	// See if this game exists
 	var room = io.sockets.adapter.rooms[gameID];
     if (room) {
@@ -46,6 +48,21 @@ function joinGame(data) {
     	this.emit('game_not_found', {
     		gameID: gameID,
     	});
+    }
+}
+
+function startGame(data) {
+    var gameID = data.gameID;
+
+    // See if this game exists
+    var room = io.sockets.adapter.rooms[gameID];
+    if (room) {
+        // Broadcast that this game has started
+        io.to(gameID).emit('start_game');
+    } else {
+        this.emit('game_not_found', {
+            gameID: gameID,
+        });
     }
 }
 
