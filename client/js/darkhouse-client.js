@@ -30,7 +30,25 @@
 
 	// Join Game button
 	$('#join-game').click(function() {
-		socket.emit('join_game', { gameID: '123456' });
+		if ($('#room-number-input').hasClass('invisible')) {
+			$('#create-game').addClass('invisible');
+			$('#room-number-input').removeClass('invisible');
+			$('#back-to-main').removeClass('invisible');
+		} else {
+			var gameID = $('#room-number-input').val();
+			if (gameID) {
+				socket.emit('join_game', { gameID : gameID });
+			} else {
+				alert('Please enter the Room Number');
+			}
+		}
+	});
+
+	// Back to Main button
+	$('#back-to-main').click(function() {
+		$('#create-game').removeClass('invisible');
+		$('#room-number-input').addClass('invisible');
+		$('#back-to-main').addClass('invisible');
 	});
 
 	// Start Game button

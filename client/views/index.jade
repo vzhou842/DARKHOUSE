@@ -9,13 +9,15 @@ html
 				h1.
 					DARKHOUSE
 				button#create-game Create Game
+				button#back-to-main.invisible Back
+				input(type='text', placeholder='Room Number')#room-number-input.invisible
 				button#join-game Join Game
 		.container#room-lobby-container.invisible
 			center
 				h1.
 					DARKHOUSE
 				h2#room-title.
-					Room [ title ]
+					Room [ gameID goes here ]
 				h3#room-person-count.
 					0 people in this room:
 				p#room-usernames.
