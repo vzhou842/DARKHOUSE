@@ -55,8 +55,8 @@ document.addEventListener('keyup', function(event) {
 
 // render loop
 var render = function () {
-	player.update();
-	player.mesh.position.add(player.direction);
+	player.updateDirection();
+	player.updatePosition(33);
 	requestAnimationFrame( render );
 	renderer.render(scene, camera);
 };
