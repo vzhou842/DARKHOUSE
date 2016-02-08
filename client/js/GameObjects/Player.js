@@ -74,6 +74,7 @@ Player.prototype.updateDirection = function() {
 const PLAYER_MOVE_SPEED_1 = 16; //left right up down
 const PLAYER_MOVE_SPEED_2 = Math.sqrt(PLAYER_MOVE_SPEED_1*PLAYER_MOVE_SPEED_1/2); //diagonal
 const PLAYER_ROTATE_SPEED = Math.PI; //radians / second
+const PLAYER_ANIMATE_STEP_SPEED = 8; //per second
 /**
  * @param dt Delta Time in milliseconds
  */
@@ -107,7 +108,7 @@ Player.prototype.updatePosition = function(dt) {
     	this.mesh.position.y += this.direction.y * (dt/1000) * (this.direction.x === 0 ? PLAYER_MOVE_SPEED_1 : PLAYER_MOVE_SPEED_2);
 
     	// --- Animate ---
-        this.step += 1 / 4;
+        this.step += PLAYER_ANIMATE_STEP_SPEED * (dt/1000);
         this.feet.left.position.setY(Math.sin(this.step) * 2);
         this.feet.right.position.setY(Math.cos(this.step + (Math.PI / 2)) * 2);
         this.hands.left.position.setY(Math.cos(this.step + (Math.PI / 2)) * 1);
