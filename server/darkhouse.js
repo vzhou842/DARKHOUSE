@@ -2,14 +2,23 @@ var THREE = require('three');
 var Player = require('../shared/GameObjects/Player')(THREE);
 var ObstacleBox = require('../shared/GameObjects/ObstacleBox')(THREE);
 var Floor = require('../shared/GameObjects/Floor')(THREE);
+var MapCreator = require('../shared/MapCreator');
 var io;
 
 function DarkhouseController(sio) {
 	io = sio;
 }
 
+// This object contains obstacles for any given map, keyed by map
+var obstacles = {
+    map1: MapCreator.createMapObstacles(Floor, ObstacleBox),
+}
+
 // This object maintains info about all socket connections.
 var sockets = {};
+
+// This object maintains info about all current games
+var games = {};
 
 DarkhouseController.prototype.onConnection = function(socket) {
     sockets[socket.id] = {
@@ -105,6 +114,9 @@ function startGame(data) {
     // See if this game exists
     var room = io.sockets.adapter.rooms[gameID];
     if (room) {
+        // Initialize data for the game
+        games[gameID].obstacles = obstacles.map1;
+
         // Broadcast that this game has started
         io.to(gameID).emit('start_game');
     } else {

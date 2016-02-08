@@ -15,28 +15,15 @@ var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize( window.innerWidth, window.innerHeight );
 $('#game-container').append( renderer.domElement );
 
-// create the map Floor
-var MAP_WIDTH = 400;
-var MAP_HEIGHT = 300;
-var floor = new Floor(MAP_WIDTH, MAP_HEIGHT);
-scene.add(floor.mesh);
-
 // create player
 var player = new Player();
 scene.add(player.mesh);
 
-// create obstacle boxes
-for (var i = 0; i < MAP_WIDTH; i += 10) {
-	scene.add((new ObstacleBox(i, 0)).mesh);
-	scene.add((new ObstacleBox(i, MAP_HEIGHT-10)).mesh);
-}
-for (i = 10; i < MAP_HEIGHT - 10; i += 10) {
-	scene.add((new ObstacleBox(0, i)).mesh);
-	scene.add((new ObstacleBox(MAP_WIDTH-10, i)).mesh);
-}
-scene.add((new ObstacleBox(20, 30)).mesh);
-scene.add((new ObstacleBox(30, 20)).mesh);
-scene.add((new ObstacleBox(50, 50)).mesh);
+// create obstacles
+var obstacles = createMapObstacles(Floor, ObstacleBox);
+obstacles.forEach(function(obstacle) {
+	scene.add(obstacle.mesh);
+});
 
 // Create light
 var ambientLight = new THREE.AmbientLight(0x606060);
