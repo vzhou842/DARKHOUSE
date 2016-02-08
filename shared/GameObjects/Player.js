@@ -10,11 +10,11 @@
 		var material = new THREE.MeshLambertMaterial({
 			color: 0xf23623,
 		});
-		
+
 		function Player() {
 			THREE.Object3D.call(this);
 			
-			this.position.z = 6;
+			this.position.set(100, 100, 6);
 			// Set and add its head
 			this.head = new THREE.Mesh(head, material);
 			this.head.position.z = 0;
@@ -50,21 +50,9 @@
 			this.add(this.nose);
 			// Set the vector of the current motion
 			this.direction = new THREE.Vector3(0, 0, 0);
-			// Set the current animation step
+
 			this.step = 0;
-			// Set the rays : one vector for every potential direction
-			this.rays = [
-				new THREE.Vector3(0, 1, 0),
-				new THREE.Vector3(1, 1, 0),
-				new THREE.Vector3(1, 0, 0),
-				new THREE.Vector3(1, -1, 0),
-				new THREE.Vector3(0, -1, 0),
-				new THREE.Vector3(-1, -1, 0),
-				new THREE.Vector3(-1, 0, 0),
-				new THREE.Vector3(-1, 1, 0)
-			];
-			// And the "RayCaster", able to test for intersections
-			this.caster = new THREE.Raycaster();
+			this.collisionDistance = 5;
 		}
 
 		Player.prototype = Object.create(THREE.Object3D.prototype);
