@@ -65,32 +65,57 @@ function Player() {
 	scene.add(this.mesh);
 }
 
-Player.prototype.changeLeftVelocity = function(status) {
-	if (status) this.direction.setX(-1);
-	else this.direction.setX(0.0);
+Player.prototype.updateDirection = function() {
+	var x = Key.isDown(Key.LEFT) ? -1 : (Key.isDown(Key.RIGHT) ? 1 : 0);
+	var y = Key.isDown(Key.DOWN) ? -1 : (Key.isDown(Key.UP) ? 1 : 0); 
+	this.direction.set(x, y, 0);
 }
 
-Player.prototype.changeRightVelocity = function(status) {
-	if (status) this.direction.setX(1);
-	else this.direction.setX(0.0);
+const PLAYER_MOVE_SPEED_1 = 16; //left right up down
+const PLAYER_MOVE_SPEED_2 = Math.sqrt(PLAYER_MOVE_SPEED_1*PLAYER_MOVE_SPEED_1/2); //diagonal
+const PLAYER_ROTATE_SPEED = Math.PI; //radians / second
+/**
+ * @param dt Delta Time in milliseconds
+ */
+Player.prototype.updatePosition = function(dt) {
+    this.checkForCollisions();
+    if (this.direction.x !== 0 || this.direction.y !== 0) {
+    	// --- Rotate ---
+        var angle = -Math.atan2(this.direction.x, this.direction.y),
+            difference = angle - this.mesh.rotation.z;
+        // If we're doing more than a 180
+        if (Math.abs(difference) > Math.PI) {
+            if (difference > 0) {
+            	this.mesh.rotation.z += 2 * Math.PI;
+            }  else {
+            	this.mesh.rotation.z -= 2 * Math.PI;
+            }
+            difference = angle - this.mesh.rotation.z;
+        }
+        // Now if we haven't reach our target angle
+        if (difference !== 0) {
+        	var rotationAddition = PLAYER_ROTATE_SPEED * (dt/1000) * (difference > 0 ? 1 : -1);
+        	if (Math.abs(rotationAddition) > Math.abs(difference)) {
+        		this.mesh.rotation.z += difference;
+        	} else {
+        		this.mesh.rotation.z += rotationAddition;
+        	}
+        }
+
+    	// --- Move ---
+    	this.mesh.position.x += this.direction.x * (dt/1000) * (this.direction.y === 0 ? PLAYER_MOVE_SPEED_1 : PLAYER_MOVE_SPEED_2);
+    	this.mesh.position.y += this.direction.y * (dt/1000) * (this.direction.x === 0 ? PLAYER_MOVE_SPEED_1 : PLAYER_MOVE_SPEED_2);
+
+    	// --- Animate ---
+        this.step += 1 / 4;
+        this.feet.left.position.setY(Math.sin(this.step) * 2);
+        this.feet.right.position.setY(Math.cos(this.step + (Math.PI / 2)) * 2);
+        this.hands.left.position.setY(Math.cos(this.step + (Math.PI / 2)) * 1);
+        this.hands.right.position.setY(Math.sin(this.step) * 1);
+    }
 }
 
-Player.prototype.changeUpVelocity = function(status) {
-	if (status) this.direction.setY(1);
-	else this.direction.setY(0.0);
-}
+// TODO: Update the directions if we intersect with an obstacle
+Player.prototype.checkForCollisions = function() {
 
-Player.prototype.changeDownVelocity = function(status) {
-	if (status) this.direction.setY(-1);
-	else this.direction.setY(0.0);
-}
-
-Player.prototype.update = function() {
-	if (Key.isDown(Key.LEFT)) this.changeLeftVelocity(true);
-	else if (Key.isDown(Key.RIGHT)) this.changeRightVelocity(true)
-	else this.changeLeftVelocity(false);
-
-	if (Key.isDown(Key.UP)) this.changeUpVelocity(true);
-	else if (Key.isDown(Key.DOWN)) this.changeDownVelocity(true)
-	else this.changeUpVelocity(false);
 }
