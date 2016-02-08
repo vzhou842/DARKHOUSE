@@ -19,25 +19,30 @@ $('#game-container').append( renderer.domElement );
 var MAP_WIDTH = 400;
 var MAP_HEIGHT = 300;
 var floor = new Floor(MAP_WIDTH, MAP_HEIGHT);
+scene.add(floor.mesh);
 
 // create player
 var player = new Player();
+scene.add(player.mesh);
 
 // create obstacle boxes
 for (var i = 0; i < MAP_WIDTH; i += 10) {
-	new ObstacleBox(i, 0);
-	new ObstacleBox(i, MAP_HEIGHT-10);
+	scene.add((new ObstacleBox(i, 0)).mesh);
+	scene.add((new ObstacleBox(i, MAP_HEIGHT-10)).mesh);
 }
 for (i = 10; i < MAP_HEIGHT - 10; i += 10) {
-	new ObstacleBox(0, i);
-	new ObstacleBox(MAP_WIDTH-10, i);
+	scene.add((new ObstacleBox(0, i)).mesh);
+	scene.add((new ObstacleBox(MAP_WIDTH-10, i)).mesh);
 }
+scene.add((new ObstacleBox(20, 30)).mesh);
+scene.add((new ObstacleBox(30, 20)).mesh);
+scene.add((new ObstacleBox(50, 50)).mesh);
 
 // Create light
 var ambientLight = new THREE.AmbientLight(0x606060);
 scene.add(ambientLight);
 
-var pointLight = new THREE.PointLight(0xffffff, 8, 200);
+var pointLight = new THREE.PointLight(0xffffff, 10, 200);
 pointLight.position.set(MAP_WIDTH/2, MAP_HEIGHT/2, 20);
 scene.add(pointLight);
 

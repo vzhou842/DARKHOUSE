@@ -1,3 +1,7 @@
+var THREE = require('three');
+var Player = require('../shared/GameObjects/Player')(THREE);
+var ObstacleBox = require('../shared/GameObjects/ObstacleBox')(THREE);
+var Floor = require('../shared/GameObjects/Floor')(THREE);
 var io;
 
 function DarkhouseController(sio) {
@@ -6,8 +10,6 @@ function DarkhouseController(sio) {
 
 // This object maintains info about all socket connections.
 var sockets = {};
-
-//TODO: maintain an object that aliases socket IDs to usernames
 
 DarkhouseController.prototype.onConnection = function(socket) {
     sockets[socket.id] = {

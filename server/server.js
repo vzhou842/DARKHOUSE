@@ -10,6 +10,7 @@ var SHARED_DIR = path.join(__dirname, '../shared');
 //start listening
 var port = process.env.PORT || '3000';
 var server = app.listen(port);
+console.log('Server listening on port ' + port);
 
 // Setup Socket.io / Game
 var io = require('socket.io')(server);
