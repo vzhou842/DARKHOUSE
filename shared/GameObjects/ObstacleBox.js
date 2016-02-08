@@ -11,9 +11,11 @@
 		});
 
 		function ObstacleBox(originX, originY) {
-			this.mesh = new THREE.Mesh(boxGeometry, boxMaterial);
-			this.mesh.position.set(originX + 5, originY + 5, 5);
+			THREE.Mesh.call(this, boxGeometry, boxMaterial);
+			this.position.set(originX + 5, originY + 5, 5);
 		}
+		ObstacleBox.prototype = Object.create(THREE.Mesh.prototype);
+
 		return ObstacleBox;
 	}
 

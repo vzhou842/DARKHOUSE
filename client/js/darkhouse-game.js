@@ -17,12 +17,12 @@ $('#game-container').append( renderer.domElement );
 
 // create player
 var player = new Player();
-scene.add(player.mesh);
+scene.add(player);
 
 // create obstacles
 var obstacles = createMapObstacles(Floor, ObstacleBox);
 obstacles.forEach(function(obstacle) {
-	scene.add(obstacle.mesh);
+	scene.add(obstacle);
 });
 
 // Create light
