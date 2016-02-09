@@ -2,15 +2,16 @@
 	var isBrowser = (typeof window !== 'undefined');
 
 	var caster = new THREE.Raycaster();
+	const SQRT_ONE_HALF = Math.sqrt(0.5);
 	var rays = [
 		new THREE.Vector3(0, 1, 0),
-		new THREE.Vector3(1, 1, 0),
+		new THREE.Vector3(SQRT_ONE_HALF, SQRT_ONE_HALF, 0),
 		new THREE.Vector3(1, 0, 0),
-		new THREE.Vector3(1, -1, 0),
+		new THREE.Vector3(SQRT_ONE_HALF, -SQRT_ONE_HALF, 0),
 		new THREE.Vector3(0, -1, 0),
-		new THREE.Vector3(-1, -1, 0),
+		new THREE.Vector3(-SQRT_ONE_HALF, -SQRT_ONE_HALF, 0),
 		new THREE.Vector3(-1, 0, 0),
-		new THREE.Vector3(-1, 1, 0)
+		new THREE.Vector3(-SQRT_ONE_HALF, SQRT_ONE_HALF, 0),
 	];
 
 	// Only 8 valid rays (for the 8 directions)

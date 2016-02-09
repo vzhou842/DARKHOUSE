@@ -22,6 +22,7 @@
 		obstacles.push(new ObstacleBox(20, 30));
 		obstacles.push(new ObstacleBox(30, 20));
 		obstacles.push(new ObstacleBox(50, 50));
+		obstacles.push(new ObstacleBox(150, 150));
 		return obstacles;
 	}
 
