@@ -58,7 +58,7 @@
 
 			// Setup the flashlight for the Player
 			const flashlightConeLength = 30;
-			this.flashlight = new THREE.SpotLight(0xffffff, 15, flashlightConeLength, Math.PI/4, 10, 1.25);
+			this.flashlight = new THREE.SpotLight(0xffffff, 0, flashlightConeLength, Math.PI/4, 10, 1.25);
 			this.flashlight.position.set(0, this.collisionDistance * .999, 0);
 			var flashlightTarget = new THREE.Object3D();
 			flashlightTarget.position.set(0, this.collisionDistance * 2, 0);
@@ -72,6 +72,7 @@
 			        opacity: 0.1,
 			    }));
 			this.flashlightCone.position.set(0, this.flashlight.position.y + flashlightConeLength/2, 0);
+			this.flashlightCone.visible = false;
 
 			this.add(this.flashlight);
 			this.add(this.flashlight.target);
@@ -83,10 +84,17 @@
 
 		Player.prototype = Object.create(THREE.Object3D.prototype);
 
-		Player.prototype.updateDirection = function() {
+		const MAX_FLASHLIGHT_INTESITY = 16;
+		Player.prototype.updateForInputs = function() {
 			var x = Key.isDown(Key.LEFT) ? -1 : (Key.isDown(Key.RIGHT) ? 1 : 0);
 			var y = Key.isDown(Key.DOWN) ? -1 : (Key.isDown(Key.UP) ? 1 : 0); 
 			this.direction.set(x, y, 0);
+
+			var flashlightOn = Key.isDown(Key.SPACE) ? true : false;
+			if (this.flashlightCone.visible !== flashlightOn) {
+				this.flashlight.intensity = flashlightOn ? MAX_FLASHLIGHT_INTESITY : 0;
+				this.flashlightCone.visible = flashlightOn;
+			}
 		}
 
 		const PLAYER_MOVE_SPEED_1 = 16; //left right up down

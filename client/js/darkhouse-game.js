@@ -43,7 +43,7 @@ document.addEventListener('keyup', function(event) {
 
 // render loop
 var render = function () {
-	player.updateDirection();
+	player.updateForInputs();
 	player.direction = directionAfterCollisions(player, obstacles);
 	player.updatePosition(33);
 	requestAnimationFrame( render );
