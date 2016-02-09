@@ -11,15 +11,20 @@
 			color: 0xf23623,
 		});
 
-		function Player() {
+		// @param angle The angle, in radians ccw from +y axis, that the player is facing. 
+		function Player(x, y, angle) {
 			THREE.Object3D.call(this);
 			
-			this.position.set(100, 100, 6);
-			// Set and add its head
+			this.position.set(x, y, 6);
+			this.step = 0;
+			this.collisionDistance = 5;
+
+			// Set and add head
 			this.head = new THREE.Mesh(head, material);
 			this.head.position.z = 0;
 			this.add(this.head);
-			// Set and add its hands
+
+			// Set and add hands
 			this.hands = {
 				left: new THREE.Mesh(hand, material),
 				right: new THREE.Mesh(hand, material)
@@ -30,7 +35,8 @@
 			this.hands.right.position.z = -1;
 			this.add(this.hands.left);
 			this.add(this.hands.right);
-			// Set and add its feet
+
+			// Set and add feet
 			this.feet = {
 				left: new THREE.Mesh(foot, material),
 				right: new THREE.Mesh(foot, material)
@@ -43,16 +49,36 @@
 			this.feet.right.rotation.z = Math.PI / 4;
 			this.add(this.feet.left);
 			this.add(this.feet.right);
-			// Set and add its nose
+
+			// Set and add nose
 			this.nose = new THREE.Mesh(nose, material);
 			this.nose.position.z = 0;
 			this.nose.position.y = 4;
 			this.add(this.nose);
-			// Set the vector of the current motion
-			this.direction = new THREE.Vector3(0, 0, 0);
 
-			this.step = 0;
-			this.collisionDistance = 5;
+			// Setup the flashlight for the Player
+			const flashlightConeLength = 30;
+			this.flashlight = new THREE.SpotLight(0xffffff, 15, flashlightConeLength, Math.PI/4, 10, 1.25);
+			this.flashlight.position.set(0, this.collisionDistance * .999, 0);
+			var flashlightTarget = new THREE.Object3D();
+			flashlightTarget.position.set(0, this.collisionDistance * 2, 0);
+			this.flashlight.target = flashlightTarget;
+
+			this.flashlightCone = new THREE.Mesh(
+			    new THREE.CylinderGeometry(12, 1, flashlightConeLength, 12),
+			    new THREE.MeshBasicMaterial({
+			        color: new THREE.Color(0xffff88),
+			        transparent: true,
+			        opacity: 0.1,
+			    }));
+			this.flashlightCone.position.set(0, this.flashlight.position.y + flashlightConeLength/2, 0);
+
+			this.add(this.flashlight);
+			this.add(this.flashlight.target);
+			this.add(this.flashlightCone);
+
+			this.rotation.z = angle;
+			this.direction = new THREE.Vector3(0, 0, 0);
 		}
 
 		Player.prototype = Object.create(THREE.Object3D.prototype);

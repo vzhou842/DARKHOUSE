@@ -16,7 +16,7 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 $('#game-container').append( renderer.domElement );
 
 // create player
-var player = new Player();
+var player = new Player(100, 100, 0);
 scene.add(player);
 
 // create obstacles
@@ -28,10 +28,6 @@ obstacles.forEach(function(obstacle) {
 // Create light
 var ambientLight = new THREE.AmbientLight(0x606060);
 scene.add(ambientLight);
-
-var pointLight = new THREE.PointLight(0xffffff, 10, 200);
-pointLight.position.set(MAP_WIDTH/2, MAP_HEIGHT/2, 20);
-scene.add(pointLight);
 
 camera.position.set(MAP_WIDTH/2, MAP_HEIGHT/2 - 50, 250);
 camera.lookAt(new THREE.Vector3(MAP_WIDTH/2, MAP_HEIGHT/2, 0));
