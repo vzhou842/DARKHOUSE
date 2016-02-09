@@ -1,22 +1,21 @@
 (function() {
 	var isBrowser = (typeof window !== 'undefined');
 	function _FloorFactory(THREE) {
-		var material = new THREE.LineBasicMaterial( { color: 0x202020, opacity: 0.25 } );
-
+		var stoneFloorTexture = isBrowser ? stoneFloorTexture = new THREE.TextureLoader().load("textures/stone.png") : null;
+		var material = new THREE.MeshLambertMaterial({ map: stoneFloorTexture });
+		var geometry = new THREE.PlaneGeometry(10, 10);
 		function Floor(width, height) {
-			var geometry = new THREE.Geometry();
-			for (var i = 0; i <= width; i += 10) {
-				geometry.vertices.push(new THREE.Vector3(i, 0, 0));
-				geometry.vertices.push(new THREE.Vector3(i, height, 0));
+			THREE.Object3D.call(this);
+			this.position.set(0, 0, 0);
+			for (var i = 0; i < width; i += 10) {
+				for (var j = 0; j < height; j+= 10) {
+					var temp = new THREE.Mesh(geometry, material);
+					temp.position.set(i+5, j+5, 0);
+					this.add(temp);
+				}
 			}
-			for (var i = 0; i <= height; i += 10) {
-				geometry.vertices.push(new THREE.Vector3(0, i, 0));
-				geometry.vertices.push(new THREE.Vector3(width, i, 0));
-			}
-
-			THREE.LineSegments.call(this, geometry, material);
 		}
-		Floor.prototype = Object.create(THREE.LineSegments.prototype);
+		Floor.prototype = Object.create(THREE.Object3D.prototype);
 		return Floor;
 	}
 

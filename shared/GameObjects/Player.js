@@ -58,7 +58,7 @@
 
 			// Setup the flashlight for the Player
 			const flashlightConeLength = 30;
-			this.flashlight = new THREE.SpotLight(0xffffff, 0, flashlightConeLength, Math.PI/4, 10, 1.25);
+			this.flashlight = new THREE.SpotLight(0xffffff, 0, flashlightConeLength, Math.PI/4, 10, 1.1);
 			this.flashlight.position.set(0, this.collisionDistance * .999, 0);
 			var flashlightTarget = new THREE.Object3D();
 			flashlightTarget.position.set(0, this.collisionDistance * 2, 0);

@@ -2,7 +2,7 @@
 	var isBrowser = (typeof window !== 'undefined');
 	function _ObstacleBoxFactory(THREE) {
 		// Load an image as texture 
-		var obstacleBoxTexture = (isBrowser) ? new THREE.TextureLoader().load("textures/crate.png") : null;
+		var obstacleBoxTexture = (isBrowser) ? new THREE.TextureLoader().load("textures/crate1.png") : null;
 
 		var boxGeometry = new THREE.BoxGeometry(10, 10, 10);
 		var boxMaterial = new THREE.MeshLambertMaterial({

@@ -29,7 +29,7 @@ obstacles.forEach(function(obstacle) {
 var ambientLight = new THREE.AmbientLight(0x606060);
 scene.add(ambientLight);
 
-camera.position.set(MAP_WIDTH/2, MAP_HEIGHT/2 - 50, 250);
+camera.position.set(MAP_WIDTH/2, MAP_HEIGHT/2 - 25, 150);
 camera.lookAt(new THREE.Vector3(MAP_WIDTH/2, MAP_HEIGHT/2, 0));
 
 

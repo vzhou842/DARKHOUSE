@@ -1,8 +1,8 @@
 (function() {
 	var isBrowser = (typeof window !== 'undefined');
 
-	var MAP_WIDTH = 400;
-	var MAP_HEIGHT = 300;
+	var MAP_WIDTH = 280;
+	var MAP_HEIGHT = 180;
 
 	function createMapObstacles(Floor, ObstacleBox) {
 		var obstacles = [];
