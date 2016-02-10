@@ -2,6 +2,7 @@ var THREE = require('three');
 var Player = require('../shared/GameObjects/Player')(THREE);
 var ObstacleBox = require('../shared/GameObjects/ObstacleBox')(THREE);
 var Floor = require('../shared/GameObjects/Floor')(THREE);
+var Wall = require('../shared/GameObjects/Wall')(THREE);
 var MapCreator = require('../shared/MapCreator');
 var io;
 
@@ -11,7 +12,7 @@ function DarkhouseController(sio) {
 
 // This object contains obstacles for any given map, keyed by map
 var obstacles = {
-    map1: MapCreator.createMapObstacles(Floor, ObstacleBox),
+    map1: MapCreator.createMapObstacles(Floor, ObstacleBox, Wall),
 }
 
 // This object maintains info about all socket connections.

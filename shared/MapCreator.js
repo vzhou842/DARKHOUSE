@@ -4,21 +4,19 @@
 	var MAP_WIDTH = 280;
 	var MAP_HEIGHT = 180;
 
-	function createMapObstacles(Floor, ObstacleBox) {
+	function createMapObstacles(Floor, ObstacleBox, Wall) {
 		var obstacles = [];
 		// create the map Floor
 		var floor = new Floor(MAP_WIDTH, MAP_HEIGHT);
 		obstacles.push(floor);
 
+		// crete walls
+		obstacles.push(new Wall(10, MAP_HEIGHT, 0, 0));
+		obstacles.push(new Wall(10, MAP_HEIGHT, MAP_WIDTH-10, 0));
+		obstacles.push(new Wall(MAP_WIDTH-20, 10, 10, 0));
+		obstacles.push(new Wall(MAP_WIDTH-20, 10, 10, MAP_HEIGHT-10));
+
 		// create obstacle boxes
-		for (var i = 0; i < MAP_WIDTH; i += 10) {
-			obstacles.push(new ObstacleBox(i, 0));
-			obstacles.push(new ObstacleBox(i, MAP_HEIGHT-10));
-		}
-		for (i = 10; i < MAP_HEIGHT - 10; i += 10) {
-			obstacles.push(new ObstacleBox(0, i));
-			obstacles.push(new ObstacleBox(MAP_WIDTH-10, i));
-		}
 		obstacles.push(new ObstacleBox(20, 30));
 		obstacles.push(new ObstacleBox(30, 20));
 		obstacles.push(new ObstacleBox(50, 50));

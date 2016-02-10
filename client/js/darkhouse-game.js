@@ -20,7 +20,7 @@ var player = new Player(100, 100, 0);
 scene.add(player);
 
 // create obstacles
-var obstacles = createMapObstacles(Floor, ObstacleBox);
+var obstacles = createMapObstacles(Floor, ObstacleBox, Wall);
 obstacles.forEach(function(obstacle) {
 	scene.add(obstacle);
 });
