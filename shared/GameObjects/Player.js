@@ -57,26 +57,31 @@
 			this.add(this.nose);
 
 			// Setup the flashlight for the Player
-			const flashlightConeLength = 30;
-			this.flashlight = new THREE.SpotLight(0xffffff, 0, flashlightConeLength, Math.PI/4, 10, 1.1);
-			this.flashlight.position.set(0, this.collisionDistance * .999, 0);
+			const flashlightConeLength = 10;
+
+			this.flashlight = new THREE.SpotLight(0xffffff, 0, 50, Math.PI/2, 10, 3);
+			this.flashlight.position.set(0, 0, 0);
+			this.flashlight.castShadow = true;
+			this.flashlight.shadowDarkness = 1;
+			this.flashlight.shadowCameraNear = true;
+
 			var flashlightTarget = new THREE.Object3D();
-			flashlightTarget.position.set(0, this.collisionDistance * 2, 0);
+			flashlightTarget.position.set(0, 10, 0);
 			this.flashlight.target = flashlightTarget;
 
-			this.flashlightCone = new THREE.Mesh(
-			    new THREE.CylinderGeometry(12, 1, flashlightConeLength, 12),
-			    new THREE.MeshBasicMaterial({
-			        color: new THREE.Color(0xffff88),
-			        transparent: true,
-			        opacity: 0.1,
-			    }));
-			this.flashlightCone.position.set(0, this.flashlight.position.y + flashlightConeLength/2, 0);
-			this.flashlightCone.visible = false;
+			// this.flashlightCone = new THREE.Mesh(
+			//     new THREE.CylinderGeometry(5, 1, flashlightConeLength, 12),
+			//     new THREE.MeshLambertMaterial({
+			//         color: new THREE.Color(0xffff88),
+			//         transparent: true,
+			//         opacity: 0.3,
+			//     }));
+			// this.flashlightCone.position.set(0, this.flashlight.position.y + flashlightConeLength/2, 0);
+			// this.flashlightCone.visible = false;
 
 			this.add(this.flashlight);
 			this.add(this.flashlight.target);
-			this.add(this.flashlightCone);
+			// this.add(this.flashlightCone);
 
 			this.rotation.z = angle;
 			this.direction = new THREE.Vector3(0, 0, 0);
@@ -84,16 +89,16 @@
 
 		Player.prototype = Object.create(THREE.Object3D.prototype);
 
-		const MAX_FLASHLIGHT_INTESITY = 16;
+		const MAX_FLASHLIGHT_INTESITY = 40;
 		Player.prototype.updateForInputs = function() {
 			var x = Key.isDown(Key.LEFT) ? -1 : (Key.isDown(Key.RIGHT) ? 1 : 0);
 			var y = Key.isDown(Key.DOWN) ? -1 : (Key.isDown(Key.UP) ? 1 : 0); 
 			this.direction.set(x, y, 0);
 
 			var flashlightOn = Key.isDown(Key.SPACE) ? true : false;
-			if (this.flashlightCone.visible !== flashlightOn) {
+			if ((this.flashlight.intensity > 0) !== flashlightOn) {
 				this.flashlight.intensity = flashlightOn ? MAX_FLASHLIGHT_INTESITY : 0;
-				this.flashlightCone.visible = flashlightOn;
+				//this.flashlightCone.visible = flashlightOn;
 			}
 		}
 

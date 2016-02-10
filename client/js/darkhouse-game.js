@@ -13,6 +13,8 @@ var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeig
 // create renderer and append to document body
 var renderer = new THREE.WebGLRenderer({antialias: true});
 renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 $('#game-container').append( renderer.domElement );
 
 // create player

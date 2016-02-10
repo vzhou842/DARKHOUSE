@@ -25,6 +25,8 @@
 			});
 			THREE.Mesh.call(this, boxGeometry, boxMaterial);
 			this.position.set(originX + 5, originY + 5, 5);
+			this.castShadow = true;
+			this.receiveShadow = true;
 		}
 		ObstacleBox.prototype = Object.create(THREE.Mesh.prototype);
 
