@@ -6,8 +6,6 @@
 		var brickTexture = (isBrowser) ? textureLoader.load("textures/brick.png") : null;
 
 		function Wall(width, height, originX, originY) {
-			THREE.Object3D.call(this);
-
 			var doRotate = false;
 			if (height > width) {
 				var temp = width;
@@ -29,9 +27,6 @@
 			var brickMaterial = new THREE.MeshLambertMaterial({ map: brickTexture });
 
 			var baseMaterials = new THREE.MultiMaterial([brickMaterial, brickMaterial, brickRepeatMaterial, brickRepeatMaterial, brickRepeatMaterial, brickRepeatMaterial]);
-	
-			this.baseMesh = new THREE.Mesh(baseGeo, baseMaterials);
-			this.add(this.baseMesh);
 
 			if (doRotate) {
 				var temp = width;
@@ -39,11 +34,11 @@
 				height = temp;
 			}
 
+			THREE.Mesh.call(this, baseGeo, baseMaterials);
 			this.rotation.z = doRotate ? Math.PI/2 : 0;
 			this.position.set(originX + width/2, originY + height/2, 5);
-			this.baseMesh.position.set(0, 0, 0);
 		}
-		Wall.prototype = Object.create(THREE.Object3D.prototype);
+		Wall.prototype = Object.create(THREE.Mesh.prototype);
 
 		return Wall;
 	}
