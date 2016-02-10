@@ -1,21 +1,22 @@
 (function() {
 	var isBrowser = (typeof window !== 'undefined');
 	function _FloorFactory(THREE) {
-		var stoneFloorTexture = isBrowser ? stoneFloorTexture = new THREE.TextureLoader().load("textures/stone.png") : null;
-		var material = new THREE.MeshLambertMaterial({ map: stoneFloorTexture });
-		var geometry = new THREE.PlaneGeometry(10, 10);
-		function Floor(width, height) {
-			THREE.Object3D.call(this);
-			this.position.set(0, 0, 0);
-			for (var i = 0; i < width; i += 10) {
-				for (var j = 0; j < height; j+= 10) {
-					var temp = new THREE.Mesh(geometry, material);
-					temp.position.set(i+5, j+5, 0);
-					this.add(temp);
-				}
-			}
+			
+		var stoneFloorTexture;
+		if (isBrowser) {
+			stoneFloorTexture = new THREE.TextureLoader().load("textures/stone.png");
+			stoneFloorTexture.wrapS = THREE.RepeatWrapping;
+			stoneFloorTexture.wrapT = THREE.RepeatWrapping;
 		}
-		Floor.prototype = Object.create(THREE.Object3D.prototype);
+
+		function Floor(width, height) {
+			stoneFloorTexture.repeat.set(width/10, height/10);
+			var material = new THREE.MeshLambertMaterial({ map: stoneFloorTexture });
+			var geometry = new THREE.PlaneGeometry(width, height, width/5, height/5);
+			THREE.Mesh.call(this, geometry, material);
+			this.position.set(width/2, height/2, 0);
+		}
+		Floor.prototype = Object.create(THREE.Mesh.prototype);
 		return Floor;
 	}
 
