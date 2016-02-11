@@ -2,17 +2,17 @@ var THREE = require('three');
 var gameloop = require('node-gameloop');
 
 // Game Objects
-var Player = require('../shared/GameObjects/Player')(THREE);
-var ObstacleBox = require('../shared/GameObjects/ObstacleBox')(THREE);
-var Floor = require('../shared/GameObjects/Floor')(THREE);
-var Wall = require('../shared/GameObjects/Wall')(THREE);
-var MapCreator = require('../shared/MapCreator');
+var Player = require('./shared/GameObjects/Player')(THREE);
+var ObstacleBox = require('./shared/GameObjects/ObstacleBox')(THREE);
+var Floor = require('./shared/GameObjects/Floor')(THREE);
+var Wall = require('./shared/GameObjects/Wall')(THREE);
+var MapCreator = require('./shared/MapCreator');
 
 // Events
-var InputEventModule = require('../shared/Events/InputEvent');
+var InputEventModule = require('./shared/Events/InputEvent');
 var InputEvent = InputEventModule.InputEvent,
     InputEventType = InputEventModule.InputEventType;
-var GameUpdateEvent = require('../shared/Events/GameUpdateEvent');
+var GameUpdateEvent = require('./shared/Events/GameUpdateEvent');
 
 var io;
 
