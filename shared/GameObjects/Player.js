@@ -98,49 +98,57 @@
 			this.flashlightOn = flashlightOn;
 		}
 
-		const PLAYER_MOVE_SPEED_1 = 16; //left right up down
+		const PLAYER_MOVE_SPEED_1 = 30; //left right up down
 		const PLAYER_MOVE_SPEED_2 = Math.sqrt(PLAYER_MOVE_SPEED_1*PLAYER_MOVE_SPEED_1/2); //diagonal
-		const PLAYER_ROTATE_SPEED = Math.PI; //radians / second
-		const PLAYER_ANIMATE_STEP_SPEED = 8; //per second
+		const PLAYER_ROTATE_SPEED = Math.PI * 1.5; //radians / second
 		/**
+		 * Updates position and rotation of a player based on their direction and input dt.
 		 * @param dt Delta Time in milliseconds
 		 */
 		Player.prototype.updatePosition = function(dt) {
-		    this.checkForCollisions();
-		    if (this.direction.x !== 0 || this.direction.y !== 0) {
-		    	// --- Rotate ---
-		        var angle = -Math.atan2(this.direction.x, this.direction.y),
-		            difference = angle - this.rotation.z;
-		        // If we're doing more than a 180
-		        if (Math.abs(difference) > Math.PI) {
-		            if (difference > 0) {
-		            	this.rotation.z += 2 * Math.PI;
-		            }  else {
-		            	this.rotation.z -= 2 * Math.PI;
-		            }
-		            difference = angle - this.rotation.z;
-		        }
-		        // Now if we haven't reach our target angle
-		        if (difference !== 0) {
-		        	var rotationAddition = PLAYER_ROTATE_SPEED * (dt/1000) * (difference > 0 ? 1 : -1);
-		        	if (Math.abs(rotationAddition) > Math.abs(difference)) {
-		        		this.rotation.z += difference;
-		        	} else {
-		        		this.rotation.z += rotationAddition;
-		        	}
-		        }
+			this.checkForCollisions();
+			if (this.direction.x !== 0 || this.direction.y !== 0) {
+				// --- Rotate ---
+				var angle = -Math.atan2(this.direction.x, this.direction.y),
+					difference = angle - this.rotation.z;
+				// If we're doing more than a 180
+				if (Math.abs(difference) > Math.PI) {
+					if (difference > 0) {
+						this.rotation.z += 2 * Math.PI;
+					}  else {
+						this.rotation.z -= 2 * Math.PI;
+					}
+					difference = angle - this.rotation.z;
+				}
+				// Now if we haven't reach our target angle
+				if (difference !== 0) {
+					var rotationAddition = PLAYER_ROTATE_SPEED * (dt/1000) * (difference > 0 ? 1 : -1);
+					if (Math.abs(rotationAddition) > Math.abs(difference)) {
+						this.rotation.z += difference;
+					} else {
+						this.rotation.z += rotationAddition;
+					}
+				}
 
-		    	// --- Move ---
-		    	this.position.x += this.direction.x * (dt/1000) * (this.direction.y === 0 ? PLAYER_MOVE_SPEED_1 : PLAYER_MOVE_SPEED_2);
-		    	this.position.y += this.direction.y * (dt/1000) * (this.direction.x === 0 ? PLAYER_MOVE_SPEED_1 : PLAYER_MOVE_SPEED_2);
+				// --- Move ---
+				this.position.x += this.direction.x * (dt/1000) * (this.direction.y === 0 ? PLAYER_MOVE_SPEED_1 : PLAYER_MOVE_SPEED_2);
+				this.position.y += this.direction.y * (dt/1000) * (this.direction.x === 0 ? PLAYER_MOVE_SPEED_1 : PLAYER_MOVE_SPEED_2);
+			}
+		}
 
-		    	// --- Animate ---
-		        this.step += PLAYER_ANIMATE_STEP_SPEED * (dt/1000);
-		        this.feet.left.position.setY(Math.sin(this.step) * 2);
-		        this.feet.right.position.setY(Math.cos(this.step + (Math.PI / 2)) * 2);
-		        this.hands.left.position.setY(Math.cos(this.step + (Math.PI / 2)) * 1);
-		        this.hands.right.position.setY(Math.sin(this.step) * 1);
-		    }
+		const PLAYER_ANIMATE_STEP_SPEED = 10; //per second
+		/**
+		 * Updates animation step for a player if the player is moving.
+		 */
+		Player.prototype.updateAnimationIfNeeded = function(dt) {
+			if (this.direction.length() > 0) {
+				// --- Animate ---
+				this.step += PLAYER_ANIMATE_STEP_SPEED * (dt/1000);
+				this.feet.left.position.setY(Math.sin(this.step) * 2);
+				this.feet.right.position.setY(Math.cos(this.step + (Math.PI / 2)) * 2);
+				this.hands.left.position.setY(Math.cos(this.step + (Math.PI / 2)) * 1);
+				this.hands.right.position.setY(Math.sin(this.step) * 1);
+			}
 		}
 
 		// TODO: Update the directions if we intersect with an obstacle

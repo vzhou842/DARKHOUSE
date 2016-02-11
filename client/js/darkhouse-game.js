@@ -37,16 +37,14 @@ camera.position.set(MAP_WIDTH/2, MAP_HEIGHT/2 - 25, 150);
 camera.lookAt(new THREE.Vector3(MAP_WIDTH/2, MAP_HEIGHT/2, 0));
 
 
-// render loop
-var render = function () {
-	//player.direction = directionAfterCollisions(player, obstacles);
-	requestAnimationFrame(render);
-	renderer.render(scene, camera);
-};
-
-// handle game update
+// Server Game Updates
+var lastServerUpdate = null;
 function handleGameUpdate(gameUpdateEvent) {
-	//TODO: store last game update for extrapolation
+	lastServerUpdate = gameUpdateEvent;
+}
+
+function extrapolateFromGameUpdate(gameUpdateEvent) {
+	// First initialize to the server provided state
 	gameUpdateEvent.positions.forEach(function(position, index) {
 		players[index].position.set(position.x, position.y, position.z);
 	});
@@ -59,7 +57,25 @@ function handleGameUpdate(gameUpdateEvent) {
 	gameUpdateEvent.flashlights.forEach(function(on, index) {
 		players[index].setFlashlightOn(on);
 	});
+
+	// Extrapolate
+	var dt = Date.now() - gameUpdateEvent.timestamp; //ms since last update
+	players.forEach(function(player) {
+		player.updatePosition(dt);
+	});
 }
+
+// render loop
+var lastRender = Date.now();
+var render = function () {
+	if (lastServerUpdate) {
+		extrapolateFromGameUpdate(lastServerUpdate);
+	}
+	players.forEach(function(player) { player.updateAnimationIfNeeded(Date.now() - lastRender); });
+	requestAnimationFrame(render);
+	renderer.render(scene, camera);
+	lastRender = Date.now();
+};
 
 // handle window resizing
 window.addEventListener('resize', onWindowResize, false);

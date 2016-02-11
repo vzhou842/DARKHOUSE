@@ -19,6 +19,7 @@
 			};
 		});
 		this.flashlights = players.map(function(player) { return player.flashlightOn; });
+		this.timestamp = Date.now();
 	}
 
 	if (isBrowser) {

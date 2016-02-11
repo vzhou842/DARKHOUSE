@@ -146,6 +146,13 @@ function startGame(data) {
     }
 }
 
+// unused right now, to be used in future
+function endGame(data) {
+    var gameID = data.gameID;
+
+    gameloop.clearGameLoop(games[gameID].gameloopID);
+}
+
 function handleClientInput(inputEvent) {
     var playerID = inputEvent.playerID;
     var gameID = sockets[playerID].gameID;
