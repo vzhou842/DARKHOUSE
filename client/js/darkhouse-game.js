@@ -17,9 +17,11 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 $('#game-container').append( renderer.domElement );
 
-// create player
-var player = new Player(100, 100, 0);
-scene.add(player);
+// create players
+var players = createPlayers(Player);
+players.forEach(function(player) {
+	scene.add(player);
+});
 
 // create obstacles
 var obstacles = createMapObstacles(Floor, ObstacleBox, Wall);
@@ -35,25 +37,32 @@ camera.position.set(MAP_WIDTH/2, MAP_HEIGHT/2 - 25, 150);
 camera.lookAt(new THREE.Vector3(MAP_WIDTH/2, MAP_HEIGHT/2, 0));
 
 
-document.addEventListener('keydown', function(event) {
-	Key.onKeydown(event);
-});
-
-document.addEventListener('keyup', function(event) {
-	Key.onKeyup(event);
-});
-
 // render loop
 var render = function () {
-	player.updateForInputs();
-	player.direction = directionAfterCollisions(player, obstacles);
-	player.updatePosition(33);
-	requestAnimationFrame( render );
+	//player.direction = directionAfterCollisions(player, obstacles);
+	requestAnimationFrame(render);
 	renderer.render(scene, camera);
 };
 
+// handle game update
+function handleGameUpdate(gameUpdateEvent) {
+	//TODO: store last game update for extrapolation
+	gameUpdateEvent.positions.forEach(function(position, index) {
+		players[index].position.set(position.x, position.y, position.z);
+	});
+	gameUpdateEvent.directions.forEach(function(direction, index) {
+		players[index].direction.set(direction.x, direction.y, direction.z);
+	});
+	gameUpdateEvent.rotations.forEach(function(z, index) {
+		players[index].rotation.z = z;
+	});
+	gameUpdateEvent.flashlights.forEach(function(on, index) {
+		players[index].setFlashlightOn(on);
+	});
+}
+
 // handle window resizing
-window.addEventListener( 'resize', onWindowResize, false );
+window.addEventListener('resize', onWindowResize, false);
 function onWindowResize() {
 	camera.aspect = window.innerWidth/window.innerHeight;
 	camera.updateProjectionMatrix();

@@ -4,6 +4,7 @@
  */
 (function() {
 	var socket = io.connect();
+	var playerID;
 
 	// Namespaces
 	var ROOM_STATE = {
@@ -62,6 +63,10 @@
 
 
 	// ---------- Communications from Server ----------
+
+	socket.on('client_connected', function(data) {
+		playerID = data.playerID;
+	});
 
 	// Game created by user
 	socket.on('game_created', function(data) {
@@ -127,6 +132,10 @@
 		alert('Room ' + data.gameID + ' doesn\'t exist!');
 	});
 
+	// Game Update from server
+	socket.on('game_update', function(gameUpdateEvent) {
+		handleGameUpdate(gameUpdateEvent);
+	});
 
 	// ---------- UI changes ----------
 	function transitionToRoom(gameID) {
@@ -172,4 +181,27 @@
 		$('#room-lobby-container').addClass('invisible');
 		$('#game-container').removeClass('invisible');	
 	}
+
+	// ---------- Input Handling ----------
+	function onKey(event, up) {
+		switch (event.keyCode) {
+			case 18:
+				event.preventDefault();
+				break;
+			case InputEventType.LEFT:
+			case InputEventType.RIGHT:
+			case InputEventType.UP:
+			case InputEventType.DOWN:
+			case InputEventType.SPACE:
+				socket.emit('client_input', new InputEvent(event.keyCode, up, playerID));
+				break;
+		}
+	}
+
+	document.addEventListener('keydown', function(event) {
+		onKey(event, false);
+	});
+	document.addEventListener('keyup', function(event) {
+		onKey(event, true);
+	});
 })();

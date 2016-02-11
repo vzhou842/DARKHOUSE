@@ -1,9 +1,19 @@
 var THREE = require('three');
+var gameloop = require('node-gameloop');
+
+// Game Objects
 var Player = require('../shared/GameObjects/Player')(THREE);
 var ObstacleBox = require('../shared/GameObjects/ObstacleBox')(THREE);
 var Floor = require('../shared/GameObjects/Floor')(THREE);
 var Wall = require('../shared/GameObjects/Wall')(THREE);
 var MapCreator = require('../shared/MapCreator');
+
+// Events
+var InputEventModule = require('../shared/Events/InputEvent');
+var InputEvent = InputEventModule.InputEvent,
+    InputEventType = InputEventModule.InputEventType;
+var GameUpdateEvent = require('../shared/Events/GameUpdateEvent');
+
 var io;
 
 function DarkhouseController(sio) {
@@ -31,6 +41,8 @@ DarkhouseController.prototype.onConnection = function(socket) {
 	socket.on('join_game', joinGame);
     socket.on('start_game', startGame);
     socket.on('leave_game', leaveGame);
+    socket.on('client_input', handleClientInput);
+    socket.emit('client_connected', { playerID: socket.id });
 }
 
 function disconnect() {
@@ -116,7 +128,14 @@ function startGame(data) {
     var room = io.sockets.adapter.rooms[gameID];
     if (room) {
         // Initialize data for the game
+        games[gameID] = {};
         games[gameID].obstacles = obstacles.map1;
+        games[gameID].players = MapCreator.createPlayers(Player);
+        games[gameID].playerIDs = Object.keys(io.sockets.adapter.rooms[gameID].sockets);
+        games[gameID].inputBuffer = [];
+
+        // Start the game loop
+        games[gameID].gameloopID = gameloop.setGameLoop(gameLoopFactory(gameID), 1000/30);
 
         // Broadcast that this game has started
         io.to(gameID).emit('start_game');
@@ -124,6 +143,64 @@ function startGame(data) {
         this.emit('game_not_found', {
             gameID: gameID,
         });
+    }
+}
+
+function handleClientInput(inputEvent) {
+    var playerID = inputEvent.playerID;
+    var gameID = sockets[playerID].gameID;
+    if (games.hasOwnProperty(gameID)) {
+        games[gameID].inputBuffer.push(inputEvent);
+    }
+}
+
+// ---------- GAME LOOP ----------
+function gameLoopFactory(gameID) {
+    /// @param dt Time change in seconds
+    return function(dt) {
+        // Handle all buffered inputs received from clients
+        var inputs = games[gameID].inputBuffer.splice(0, games[gameID].inputBuffer.length);
+        inputs.forEach(function(inputEvent) {
+            handleInputEvent(gameID, inputEvent);
+        });
+
+        // Update GameObjects
+        games[gameID].players.forEach(function(player) {
+            player.updatePosition(dt*1000);
+        });
+
+        // Send Game Update to clients
+        io.to(gameID).emit('game_update', new GameUpdateEvent(games[gameID].players));
+    };
+}
+
+function handleInputEvent(gameID, inputEvent) {
+    var playerID = inputEvent.playerID;
+    var up = inputEvent.up;
+    var player = games[gameID].players[games[gameID].playerIDs.indexOf(playerID)];
+    switch (inputEvent.type) {
+        case InputEventType.LEFT:
+            if (up && player.direction.x < 0) player.direction.x = 0;
+            else if (!up) player.direction.x = -1;
+            break;
+        case InputEventType.RIGHT:
+            if (up && player.direction.x > 0) player.direction.x = 0;
+            else if (!up) player.direction.x = 1;
+            break;
+        case InputEventType.UP:
+            if (up && player.direction.y > 0) player.direction.y = 0;
+            else if (!up) player.direction.y = 1;
+            break;
+        case InputEventType.DOWN:
+            if (up && player.direction.y < 0) player.direction.y = 0;
+            else if (!up) player.direction.y = -1;
+            break;
+        case InputEventType.SPACE:
+            player.flashlightOn = !up;
+            break;
+        default:
+            console.error('Input event with unknown type ' + inputEvent.type + ' received.');
+            break;
     }
 }
 

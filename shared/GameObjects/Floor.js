@@ -10,8 +10,11 @@
 		}
 
 		function Floor(width, height) {
-			stoneFloorTexture.repeat.set(width/10, height/10);
-			var material = new THREE.MeshLambertMaterial({ map: stoneFloorTexture });
+			var material = null;
+			if (stoneFloorTexture) {
+				stoneFloorTexture.repeat.set(width/10, height/10);
+				material = new THREE.MeshLambertMaterial({ map: stoneFloorTexture });
+			}
 			var geometry = new THREE.PlaneGeometry(width, height, width/2, height/2);
 			THREE.Mesh.call(this, geometry, material);
 			this.position.set(width/2, height/2, 0);

@@ -85,21 +85,17 @@
 
 			this.rotation.z = angle;
 			this.direction = new THREE.Vector3(0, 0, 0);
+			this.flashlightOn = false;
 		}
 
 		Player.prototype = Object.create(THREE.Object3D.prototype);
 
 		const MAX_FLASHLIGHT_INTESITY = 40;
-		Player.prototype.updateForInputs = function() {
-			var x = Key.isDown(Key.LEFT) ? -1 : (Key.isDown(Key.RIGHT) ? 1 : 0);
-			var y = Key.isDown(Key.DOWN) ? -1 : (Key.isDown(Key.UP) ? 1 : 0); 
-			this.direction.set(x, y, 0);
-
-			var flashlightOn = Key.isDown(Key.SPACE) ? true : false;
-			if ((this.flashlight.intensity > 0) !== flashlightOn) {
+		Player.prototype.setFlashlightOn = function(flashlightOn) {
+			if (this.flashlightOn !== flashlightOn) {
 				this.flashlight.intensity = flashlightOn ? MAX_FLASHLIGHT_INTESITY : 0;
-				//this.flashlightCone.visible = flashlightOn;
 			}
+			this.flashlightOn = flashlightOn;
 		}
 
 		const PLAYER_MOVE_SPEED_1 = 16; //left right up down

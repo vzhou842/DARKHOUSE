@@ -24,13 +24,21 @@
 		return obstacles;
 	}
 
+	function createPlayers(Player) {
+		var players = [];
+		players.push(new Player(15, 15, 0));
+		return players;
+	}
+
 	if (isBrowser) {
 		window.createMapObstacles = createMapObstacles;
+		window.createPlayers = createPlayers;
 		window.MAP_WIDTH = MAP_WIDTH;
 		window.MAP_HEIGHT = MAP_HEIGHT;
 	} else {
 		module.exports = {
 			createMapObstacles: createMapObstacles,
+			createPlayers: createPlayers,
 			MAP_WIDTH: MAP_WIDTH,
 			MAP_HEIGHT: MAP_HEIGHT,
 		};

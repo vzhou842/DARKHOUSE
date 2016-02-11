@@ -24,15 +24,16 @@ html
 				p#room-usernames.
 				button#room-start-button.invisible Start Game
 				button#leave-room Leave Room
-		.container#game-container
+		.container#game-container.invisible
 
 
 		// Scripts
 		script(type='text/javascript', src='https://cdn.socket.io/socket.io-1.4.5.js')
 		script(type='text/javascript', src='https://code.jquery.com/jquery-latest.min.js')
 		script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r73/three.min.js')
+		script(type='text/javascript', src='/events/InputEvent.js')
+		script(type='text/javascript', src='/events/GameUpdateEvent.js')
 		script(type='text/javascript', src='/js/darkhouse-client.js')
-		script(type='text/javascript', src='/js/Key.js')
 		script(type='text/javascript', src='/GameObjects/Player.js')
 		script(type='text/javascript', src='/GameObjects/Floor.js')
 		script(type='text/javascript', src='/GameObjects/ObstacleBox.js')
