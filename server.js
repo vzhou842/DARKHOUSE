@@ -4,8 +4,8 @@ var DarkhouseController = require('./darkhouse');
 
 var app = express();
 
-var CLIENT_DIR = path.join(__dirname, '../client');
-var SHARED_DIR = path.join(__dirname, '../shared');
+var CLIENT_DIR = path.join(__dirname, './client');
+var SHARED_DIR = path.join(__dirname, './shared');
 
 //start listening
 var port = process.env.PORT || '3000';
