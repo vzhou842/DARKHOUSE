@@ -27,6 +27,9 @@
 	function createPlayers(Player) {
 		var players = [];
 		players.push(new Player(15, 15, 0));
+		players.push(new Player(MAP_WIDTH-15, 15, 0));
+		players.push(new Player(MAP_WIDTH-15, MAP_HEIGHT-15, 0));
+		players.push(new Player(15, MAP_HEIGHT-15, 0));
 		return players;
 	}
 

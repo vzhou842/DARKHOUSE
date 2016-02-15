@@ -185,6 +185,10 @@ function handleInputEvent(gameID, inputEvent) {
     var playerID = inputEvent.playerID;
     var up = inputEvent.up;
     var player = games[gameID].players[games[gameID].playerIDs.indexOf(playerID)];
+    if (!player) {
+        console.error("Could not find player corresponding to playerID " + playerID);
+        return;
+    }
     switch (inputEvent.type) {
         case InputEventType.LEFT:
             if (up && player.direction.x < 0) player.direction.x = 0;
