@@ -40,11 +40,11 @@
 					direction.setY(0);
 				}
 
-                if ((i === 1 || i === 2 || i === 3) && direction.x === 1) {
-                	direction.setX(0);
-                } else if ((i === 5 || i === 6 || i === 7) && direction.x === -1) {
-                	direction.setX(0);
-                }
+				if ((i === 1 || i === 2 || i === 3) && direction.x === 1) {
+					direction.setX(0);
+				} else if ((i === 5 || i === 6 || i === 7) && direction.x === -1) {
+					direction.setX(0);
+				}
 			}
 		}
 		return direction;
