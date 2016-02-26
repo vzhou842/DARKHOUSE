@@ -106,7 +106,6 @@
 		 * @param dt Delta Time in milliseconds
 		 */
 		Player.prototype.updatePosition = function(dt) {
-			this.checkForCollisions();
 			if (this.direction.x !== 0 || this.direction.y !== 0) {
 				// --- Rotate ---
 				var angle = -Math.atan2(this.direction.x, this.direction.y),
@@ -149,11 +148,6 @@
 				this.hands.left.position.setY(Math.cos(this.step + (Math.PI / 2)) * 1);
 				this.hands.right.position.setY(Math.sin(this.step) * 1);
 			}
-		}
-
-		// TODO: Update the directions if we intersect with an obstacle
-		Player.prototype.checkForCollisions = function() {
-
 		}
 
 		return Player;
