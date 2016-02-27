@@ -86,6 +86,12 @@
 			this.rotation.z = angle;
 			this.direction = new THREE.Vector3(0, 0, 0);
 			this.flashlightOn = false;
+
+			//server fields
+			this.isGoingLeft = false;
+			this.isGoingUp = false;
+			this.isGoingRight = false;
+			this.isGoingDown = false;
 		}
 
 		Player.prototype = Object.create(THREE.Object3D.prototype);
@@ -133,6 +139,18 @@
 				this.position.x += this.direction.x * (dt/1000) * (this.direction.y === 0 ? PLAYER_MOVE_SPEED_1 : PLAYER_MOVE_SPEED_2);
 				this.position.y += this.direction.y * (dt/1000) * (this.direction.x === 0 ? PLAYER_MOVE_SPEED_1 : PLAYER_MOVE_SPEED_2);
 			}
+		}
+
+		/**
+		 * Should only be called by server.
+		 * Updates the player's velocity based on what keys are down in the client.
+		 * Used to potentially reset velocity after collisions cease.
+		 */
+		Player.prototype.serverUpdateVelocity = function() {
+			if (this.isGoingLeft) this.direction.x = -1;
+			if (this.isGoingUp) this.direction.y = 1;
+			if (this.isGoingRight) this.direction.x = 1;
+			if (this.isGoingDown) this.direction.y = -1;
 		}
 
 		const PLAYER_ANIMATE_STEP_SPEED = 10; //per second

@@ -179,6 +179,7 @@ function gameLoopFactory(gameID) {
 
         // Update GameObjects
         games[gameID].players.forEach(function(player) {
+            player.serverUpdateVelocity();
             CollisionDetector.checkForCollisions(player, games[gameID].obstacles);
             player.updatePosition(dt*1000);
         });
@@ -200,18 +201,22 @@ function handleInputEvent(gameID, inputEvent) {
         case InputEventType.LEFT:
             if (up && player.direction.x < 0) player.direction.x = 0;
             else if (!up) player.direction.x = -1;
+            player.isGoingLeft = !up;
             break;
         case InputEventType.RIGHT:
             if (up && player.direction.x > 0) player.direction.x = 0;
             else if (!up) player.direction.x = 1;
+            player.isGoingRight = !up;
             break;
         case InputEventType.UP:
             if (up && player.direction.y > 0) player.direction.y = 0;
             else if (!up) player.direction.y = 1;
+            player.isGoingUp = !up;
             break;
         case InputEventType.DOWN:
             if (up && player.direction.y < 0) player.direction.y = 0;
             else if (!up) player.direction.y = -1;
+            player.isGoingDown = !up;
             break;
         case InputEventType.SPACE:
             player.flashlightOn = !up;
