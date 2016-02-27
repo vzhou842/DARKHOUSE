@@ -17,7 +17,7 @@
 			
 			this.position.set(x, y, 6);
 			this.step = 0;
-			this.collisionDistance = 5;
+			this.collisionDistance = 4.5;
 
 			// Set and add head
 			this.head = new THREE.Mesh(head, material);

@@ -50,6 +50,7 @@ function extrapolateFromGameUpdate(gameUpdateEvent) {
 	});
 	gameUpdateEvent.directions.forEach(function(direction, index) {
 		players[index].direction.set(direction.x, direction.y, direction.z);
+        //TODO: check for collisions in client side, just not at 60 fps
 	});
 	gameUpdateEvent.rotations.forEach(function(z, index) {
 		players[index].rotation.z = z;

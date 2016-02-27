@@ -14,6 +14,8 @@ var InputEvent = InputEventModule.InputEvent,
     InputEventType = InputEventModule.InputEventType;
 var GameUpdateEvent = require('./shared/Events/GameUpdateEvent');
 
+var CollisionDetector = require('./shared/CollisionDetector')(THREE);
+
 var io;
 
 function DarkhouseController(sio) {
@@ -155,6 +157,10 @@ function endGame(data) {
 
 function handleClientInput(inputEvent) {
     var playerID = inputEvent.playerID;
+    if (!sockets[playerID]) {
+        console.error("PlayerID " + playerID + " not found in sockets:\n" + sockets);
+        return;
+    }
     var gameID = sockets[playerID].gameID;
     if (games.hasOwnProperty(gameID)) {
         games[gameID].inputBuffer.push(inputEvent);
@@ -173,6 +179,7 @@ function gameLoopFactory(gameID) {
 
         // Update GameObjects
         games[gameID].players.forEach(function(player) {
+            CollisionDetector.checkForCollisions(player, games[gameID].obstacles);
             player.updatePosition(dt*1000);
         });
 

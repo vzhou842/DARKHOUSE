@@ -23,11 +23,12 @@
 
 			var baseGeo = new THREE.BoxGeometry(width, height, 10, width/10, height/10, 1);
 
-			var brickRepeatMaterial = new THREE.MeshLambertMaterial({ map: brickTextureRepeat });
-			var brickMaterial = new THREE.MeshLambertMaterial({ map: brickTexture });
-
-			var baseMaterials = new THREE.MultiMaterial([brickMaterial, brickMaterial, brickRepeatMaterial, brickRepeatMaterial, brickRepeatMaterial, brickRepeatMaterial]);
-
+			var baseMaterials;
+			if (isBrowser) {
+				var brickRepeatMaterial = new THREE.MeshLambertMaterial({ map: brickTextureRepeat });
+				var brickMaterial = new THREE.MeshLambertMaterial({ map: brickTexture });
+				baseMaterials = new THREE.MultiMaterial([brickMaterial, brickMaterial, brickRepeatMaterial, brickRepeatMaterial, brickRepeatMaterial, brickRepeatMaterial]);
+			}
 			if (doRotate) {
 				var temp = width;
 				width = height;
@@ -37,6 +38,8 @@
 			THREE.Mesh.call(this, baseGeo, baseMaterials);
 			this.rotation.z = doRotate ? Math.PI/2 : 0;
 			this.position.set(originX + width/2, originY + height/2, 5);
+			this.collisionWidth = width;
+			this.collisionHeight = height;
 		}
 		Wall.prototype = Object.create(THREE.Mesh.prototype);
 

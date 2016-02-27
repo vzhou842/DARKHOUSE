@@ -16,8 +16,8 @@
 			else if (type == 4) return obstacleBoxTexture4;
 			else return obstacleBoxTexture5;
 		}
-
-		var boxGeometry = new THREE.BoxGeometry(10, 10, 10);
+		const size = 10;
+		var boxGeometry = new THREE.BoxGeometry(size, size, size);
 
 		function ObstacleBox(type, originX, originY) {
 			var boxMaterial = new THREE.MeshLambertMaterial({
@@ -27,6 +27,8 @@
 			this.position.set(originX + 5, originY + 5, 5);
 			this.castShadow = true;
 			this.receiveShadow = true;
+			this.collisionWidth = size;
+			this.collisionHeight = size;
 		}
 		ObstacleBox.prototype = Object.create(THREE.Mesh.prototype);
 
