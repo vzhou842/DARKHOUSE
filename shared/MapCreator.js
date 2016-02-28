@@ -24,12 +24,13 @@
 		return obstacles;
 	}
 
-	function createPlayers(Flashlighter) {
+	function createPlayers(Flashlighter, Ghost) {
 		var players = [];
 		players.push(new Flashlighter(15, 15, 0));
 		players.push(new Flashlighter(MAP_WIDTH-15, 15, 0));
 		players.push(new Flashlighter(MAP_WIDTH-15, MAP_HEIGHT-15, 0));
 		players.push(new Flashlighter(15, MAP_HEIGHT-15, 0));
+		players.push(new Ghost(MAP_WIDTH/2, MAP_HEIGHT/2, 0));
 		return players;
 	}
 

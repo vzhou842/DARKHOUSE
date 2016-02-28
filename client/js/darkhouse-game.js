@@ -18,7 +18,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 $('#game-container').append( renderer.domElement );
 
 // create players
-var players = createPlayers(Flashlighter);
+var players = createPlayers(Flashlighter, Ghost);
 players.forEach(function(player) {
 	scene.add(player);
 });
@@ -56,7 +56,9 @@ function extrapolateFromGameUpdate(gameUpdateEvent) {
 		players[index].rotation.z = z;
 	});
 	gameUpdateEvent.flashlights.forEach(function(on, index) {
-		players[index].setFlashlightOn(on);
+		if (players[index] instanceof Flashlighter) {
+			players[index].setFlashlightOn(on);
+		}
 	});
 
 	// Extrapolate

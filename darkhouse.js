@@ -4,6 +4,7 @@ var gameloop = require('node-gameloop');
 // Game Objects
 var Player = require('./shared/GameObjects/Player')(THREE);
 var Flashlighter = require('./shared/GameObjects/Flashlighter')(THREE, Player);
+var Ghost = require('./shared/GameObjects/Ghost')(THREE, Player);
 var ObstacleBox = require('./shared/GameObjects/ObstacleBox')(THREE);
 var Floor = require('./shared/GameObjects/Floor')(THREE);
 var Wall = require('./shared/GameObjects/Wall')(THREE);
@@ -133,7 +134,7 @@ function startGame(data) {
         // Initialize data for the game
         games[gameID] = {};
         games[gameID].obstacles = obstacles.map1;
-        games[gameID].players = MapCreator.createPlayers(Flashlighter);
+        games[gameID].players = MapCreator.createPlayers(Flashlighter, Ghost);
         games[gameID].playerIDs = Object.keys(io.sockets.adapter.rooms[gameID].sockets);
         games[gameID].inputBuffer = [];
 
