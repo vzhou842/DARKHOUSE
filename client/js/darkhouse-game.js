@@ -18,7 +18,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 $('#game-container').append( renderer.domElement );
 
 // create players
-var players = createPlayers(Player);
+var players = createPlayers(Flashlighter);
 players.forEach(function(player) {
 	scene.add(player);
 });
