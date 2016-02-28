@@ -16,6 +16,11 @@
 		obstacles.push(new Wall(MAP_WIDTH-20, 10, 10, 0));
 		obstacles.push(new Wall(MAP_WIDTH-20, 10, 10, MAP_HEIGHT-10));
 
+		obstacles.push(new Wall(10, MAP_HEIGHT-40, 20, 20));
+		obstacles.push(new Wall(10, MAP_HEIGHT-40, MAP_WIDTH-30, 20));
+		obstacles.push(new Wall(10, 30, MAP_WIDTH/2-5, 10));
+		obstacles.push(new Wall(10, 30, MAP_WIDTH/2-5, MAP_HEIGHT-40));
+
 		// create obstacle boxes
 		obstacles.push(new ObstacleBox(1, 20, 30));
 		obstacles.push(new ObstacleBox(1, 30, 20));

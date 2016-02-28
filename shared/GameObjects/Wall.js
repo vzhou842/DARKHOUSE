@@ -38,6 +38,8 @@
 			THREE.Mesh.call(this, baseGeo, baseMaterials);
 			this.rotation.z = doRotate ? Math.PI/2 : 0;
 			this.position.set(originX + width/2, originY + height/2, 5);
+			this.castShadow = true;
+			this.receiveShadow = true;
 			this.collisionWidth = width;
 			this.collisionHeight = height;
 		}
