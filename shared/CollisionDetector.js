@@ -35,21 +35,47 @@
 		// Changes object's direction vector on collision.
 		function checkForCollision(object, obstacle) {
 			var direction = object.direction;
+
+			//loop through 8 directions
+			for (var i = 0; i < 8; i++) {
+				var result = checkForRayIntersection(object, obstacle, rays[i]);
+				if (result && distance2d(result, object.position) <= object.collisionDistance) {
+					// Collision! Disable velocity in this direction.
+					if ((i === 0 || i === 1 || i === 7) && direction.y === 1) {
+						direction.setY(0);
+					} else if ((i === 3 || i === 4 || i === 5) && direction.y === -1) {
+						direction.setY(0);
+					}
+
+					if ((i === 1 || i === 2 || i === 3) && direction.x === 1) {
+						direction.setX(0);
+					} else if ((i === 5 || i === 6 || i === 7) && direction.x === -1) {
+						direction.setX(0);
+					}
+				}
+			}
+			
+		}
+
+		// Private Helper. Checks for intersections in a given direction between an object and an obstacle.
+		// Returns a THREE.Vector3 for the location of the intersection CLOSEST TO THE OBJECT, or null if none.
+		function checkForRayIntersection(object, obstacle, d) {
 			var halfWidth = obstacle.collisionWidth/2;
 			var halfHeight = obstacle.collisionHeight/2;
-			if (!halfWidth || !halfHeight) return;
+			if (!halfWidth || !halfHeight) return null;
 
 			//early return distance check
 			if (halfWidth <= 10 && halfHeight <= 10 && distance2d(object.position, obstacle.position) > FIVE_ROOT_2 + object.collisionDistance) {
-				return;
+				return null;
 			}
 
 			var r = object.position; //ray start
-			var d; //ray direction
 			var s = new THREE.Vector3();
 			var e = new THREE.Vector3();
 
 			//loop through 4 sides
+			var result;
+			var resultDistance;
 			for (var side = 0; side < 4; side++) {
 				s.set(obstacle.position.x + (side % 2 == 0 ? -halfWidth : halfWidth),
 					obstacle.position.y + (side < 2 ? -halfHeight : halfHeight),
@@ -58,26 +84,17 @@
 					obstacle.position.y + (side % 2 == 0 ? -halfHeight : halfHeight),
 					0);
 
-				//loop through 8 directions
-				for (var i = 0; i < 8; i++) {
-					d = rays[i];
-					var result = intersectLineSegments(r, d, s, e);
-					if (result && distance2d(result, object.position) <= object.collisionDistance) {
-						// Collision! Disable velocity in this direction.
-						if ((i === 0 || i === 1 || i === 7) && direction.y === 1) {
-							direction.setY(0);
-						} else if ((i === 3 || i === 4 || i === 5) && direction.y === -1) {
-							direction.setY(0);
-						}
-
-						if ((i === 1 || i === 2 || i === 3) && direction.x === 1) {
-							direction.setX(0);
-						} else if ((i === 5 || i === 6 || i === 7) && direction.x === -1) {
-							direction.setX(0);
-						}
-					}
+				var tempResult = intersectLineSegments(r, d, s, e);
+				var tempDistance = Math.Infinity;
+				if (tempResult) {
+					tempDistance = distance2d(tempResult, object.position);
+				}
+				if (!result || resultDistance > tempDistance) {
+					result = tempResult;
+					resultDistance = tempDistance;
 				}
 			}
+			return result;
 		}
 
 		/**

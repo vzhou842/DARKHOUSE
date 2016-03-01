@@ -1,5 +1,6 @@
 (function() {
 	var isBrowser = (typeof window !== 'undefined');
+	//TODO: performance optimization -- merge geometries. http://learningthreejs.com/blog/2011/10/05/performance-merging-geometry/
 	function _ObstacleBoxFactory(THREE) {
 
 		var textureLoader = new THREE.TextureLoader();

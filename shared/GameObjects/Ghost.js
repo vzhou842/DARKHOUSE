@@ -19,6 +19,8 @@
 			this.head = new THREE.Mesh(head, material);
 			this.head.position.z = 0;
 			this.add(this.head);
+
+			this.health = 100;
 		}
 
 		Ghost.prototype = Object.create(Player.prototype);
